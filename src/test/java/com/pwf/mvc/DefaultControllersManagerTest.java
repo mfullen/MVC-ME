@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pwf.mvc;
 
 import static org.junit.Assert.*;
@@ -9,11 +5,10 @@ import org.junit.Test;
 
 /**
  *
- * @author aorozc01
  */
 public class DefaultControllersManagerTest
 {
-    class SubOfAbstractController extends AbstractController<Object, Object>
+    class SubOfAbstractController extends AbstractController
     {
     };
 

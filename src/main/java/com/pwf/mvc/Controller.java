@@ -1,41 +1,42 @@
-
 package com.pwf.mvc;
 
 import java.util.Collection;
 
 /**
- * The Controller interface describes the methods required to be a controller. It is based on a Model being manipulated
- * and a ViewModel which is sent to any UI's
+ * The Controller interface describes the methods required to be a controller.
+ * It is based on a Model being manipulated and a ViewModel which is sent to any
+ * UI's
  */
-public interface Controller<Model, ViewModel>
+public interface Controller
 {
     /**
-     * Adds a postback Observer. Postback Observers get notified when data needs to go from UI->Controller->X
+     * Adds a postback Observer. Postback Observers get notified when data needs
+     * to go from UI->Controller->X
      *
      * @param postBackObserver
      */
-    void addPostbackObserver(PostBackObserver<Model> postBackObserver);
+    <Model extends Object> void addPostbackObserver(PostBackObserver<Model> postBackObserver);
 
     /**
      * Add a viewObserver. View Observers get notified when a model is updated
      *
      * @param observer
      */
-    void addViewObserver(View<ViewModel> observer);
+    <Model extends Object> void addViewObserver(View<Model> observer);
 
     /**
      * Get the PostbackObservers
      *
      * @return
      */
-    Collection<PostBackObserver<Model>> getPostBackObservers();
+    <Model extends Object> Collection<PostBackObserver<Model>> getPostBackObservers();
 
     /**
      * Get the View Observers
      *
      * @return
      */
-    Collection<View<ViewModel>> getViewObservers();
+    <Model extends Object> Collection<View<Model>> getViewObservers();
 
     /**
      * Get a viewObserver by name
@@ -43,19 +44,20 @@ public interface Controller<Model, ViewModel>
      * @param name the name to look for
      * @return
      */
-    View<ViewModel> getView(String name) throws ViewNotFoundException;
+    <Model extends Object> View<Model> getView(String name) throws
+            ViewNotFoundException;
 
     /**
      * Remove postBackObserver
      *
      * @param postBackObserver
      */
-    void removePostbackObserver(PostBackObserver<Model> postBackObserver);
+    <Model extends Object> void removePostbackObserver(PostBackObserver<Model> postBackObserver);
 
     /**
      * remove ViewObservers
      *
      * @param observer
      */
-    void removeViewObserver(View<ViewModel> observer);
+    <Model extends Object> void removeViewObserver(View<Model> observer);
 }

@@ -1,72 +1,75 @@
-
 package com.pwf.mvc;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
  *
- * @author aorozc01
  */
-public abstract class AbstractController<Model, ViewModel> implements Controller<Model, ViewModel>
+public abstract class AbstractController implements Controller
 {
-    private Map<String, View<ViewModel>> observers = new HashMap<String, View<ViewModel>>();
-    private Collection<PostBackObserver<Model>> postBackObservers = new ArrayList<PostBackObserver<Model>>();
+    private Map<String, View<? extends Object>> observers = new HashMap<String, View<? extends Object>>();
+    private Collection<PostBackObserver<? extends Object>> postBackObservers = new ArrayList<PostBackObserver<? extends Object>>();
 
     @Override
-    public void addViewObserver(View<ViewModel> observer)
+    public <Model extends Object> void addViewObserver(View<Model> observer)
     {
         this.observers.put(observer.getName(), observer);
     }
 
     @Override
-    public void removeViewObserver(View<ViewModel> observer)
+    public <Model extends Object> void removeViewObserver(View<Model> observer)
     {
         this.observers.remove(observer.getName());
     }
 
     @Override
-    public void addPostbackObserver(PostBackObserver<Model> postBackObserver)
+    public <Model extends Object> void addPostbackObserver(PostBackObserver<Model> postBackObserver)
     {
         this.postBackObservers.add(postBackObserver);
     }
 
     @Override
-    public void removePostbackObserver(PostBackObserver<Model> postBackObserver)
+    public <Model extends Object> void removePostbackObserver(PostBackObserver<Model> postBackObserver)
     {
         this.postBackObservers.remove(postBackObserver);
     }
 
-    protected void firePostBackData(Model model)
+    protected <Model extends Object> void firePostBackData(Model model)
     {
-        for (PostBackObserver<Model> postBackObserver : postBackObservers)
+        for (Iterator<PostBackObserver<? extends Object>> it = postBackObservers.iterator(); it.hasNext();)
         {
+            PostBackObserver<Model> postBackObserver = (PostBackObserver<Model>) it.next();
             postBackObserver.dataToPost(model);
         }
     }
 
-    protected void fireUpdateView(ViewModel model)
+    protected <Model extends Object> void fireUpdateView(Model model)
     {
-        for (View<ViewModel> viewObserver : observers.values())
+        for (Iterator<View<? extends Object>> it = observers.values().iterator(); it.hasNext();)
         {
+            View<Model> viewObserver = (View<Model>) it.next();
             viewObserver.update(model);
         }
     }
 
-    protected void fireSetVisible(boolean visible)
+    protected <Model extends Object> void fireSetVisible(boolean visible)
     {
-        for (View<ViewModel> viewObserver : observers.values())
+        for (Iterator<View<? extends Object>> it = observers.values().iterator(); it.hasNext();)
         {
+            View<Model> viewObserver = (View<Model>) it.next();
             viewObserver.setVisible(visible);
         }
     }
 
-    public View<ViewModel> getView(String name) throws ViewNotFoundException
+    public <Model extends Object> View<Model> getView(String name) throws
+            ViewNotFoundException
     {
-        View<ViewModel> view = this.observers.get(name);
+        View<Model> view = (View<Model>) this.observers.get(name);
         if (view == null)
         {
             throw new ViewNotFoundException("The view (" + name + ") could not be found");
@@ -75,14 +78,42 @@ public abstract class AbstractController<Model, ViewModel> implements Controller
     }
 
     @Override
-    public Collection<View<ViewModel>> getViewObservers()
+    public <Model extends Object> Collection<View<Model>> getViewObservers()
     {
-        return Collections.unmodifiableCollection(this.observers.values());
+        Collection<View<Model>> values = new ArrayList<View<Model>>(this.observers.values().size());
+        for (View<? extends Object> view : this.observers.values())
+        {
+            values.add((View<Model>) view);
+        }
+
+        return Collections.unmodifiableCollection(values);
     }
 
     @Override
-    public Collection<PostBackObserver<Model>> getPostBackObservers()
+    public <Model extends Object> Collection<PostBackObserver<Model>> getPostBackObservers()
     {
-        return Collections.unmodifiableCollection(this.postBackObservers);
+        Collection<PostBackObserver<Model>> values = new ArrayList<PostBackObserver<Model>>(this.postBackObservers.size());
+        for (PostBackObserver<? extends Object> postBackObserver : this.postBackObservers)
+        {
+            values.add((PostBackObserver<Model>) postBackObserver);
+        }
+
+        return Collections.unmodifiableCollection(values);
+    }
+
+    protected void updateErrorView(String errorMessage)
+    {
+        try
+        {
+            this.getView(View.ERROR_VIEW_ID).update(errorMessage);
+        }
+        catch (ViewNotFoundException ex)
+        {
+        }
+    }
+
+    protected String createViewNotFoundErrorMesage(String viewName)
+    {
+        return "View Id (" + viewName + ") not registered in the class " + this.getClass().getName();
     }
 }

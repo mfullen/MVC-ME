@@ -7,6 +7,8 @@ package com.pwf.mvc;
 import org.junit.AfterClass;
 import org.junit.Test;
 import static org.junit.Assert.*;
+
+import java.util.Collection;
 import org.junit.BeforeClass;
 
 /**
@@ -123,6 +125,20 @@ public class AbstractControllerTest
         assertEquals(1, controller.getViewObservers().size());
         controller.fireSetVisible(true);
         controller.fireSetVisible(false);
+    }
+
+    @Test
+    public void tesStuff()
+    {
+        AbstractController controller = new AbstractControllerImpl();
+        controller.addPostbackObserver(new PostBackObserver<String>()
+        {
+            public void dataToPost(String model)
+            {
+                System.out.println("Model:" + model);
+            }
+        });
+        controller.firePostBackData("lol");
     }
 
     public class AbstractControllerImpl extends AbstractController

@@ -1,11 +1,10 @@
-
 package com.pwf.mvc;
 
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
-public class DefaultControllersManager implements ControllersManager
+class DefaultControllersManager implements ControllersManager
 {
     private Set<Controller> controllers = new HashSet<Controller>();
 

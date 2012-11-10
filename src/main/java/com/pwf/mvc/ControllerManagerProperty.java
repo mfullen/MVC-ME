@@ -5,7 +5,7 @@ package com.pwf.mvc;
  *
  * Describes having a ControllerManager
  */
-public interface HasControllerManager
+public interface ControllerManagerProperty
 {
     /**
      * SetControllerManager

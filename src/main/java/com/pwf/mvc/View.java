@@ -1,12 +1,13 @@
-
 package com.pwf.mvc;
 
 /**
  *
  * View interface to describe a View in the MVC Framework
  */
-public interface View<T> extends HasControllerManager
+public interface View<T> extends ControllerManagerProperty
 {
+    static final String ERROR_VIEW_ID = "error";
+
     /**
      * Update the view based on the model T
      *
