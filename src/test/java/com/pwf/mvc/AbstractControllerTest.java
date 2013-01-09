@@ -1,7 +1,3 @@
-/*
- * To change this template, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.pwf.mvc;
 
 import org.junit.AfterClass;
@@ -32,15 +28,15 @@ public class AbstractControllerTest
     }
 
     /**
-     * Test of addViewObserver method, of class AbstractController.
+     * Test of addViewListener method, of class AbstractController.
      */
     @Test
     public void testAddViewObserver()
     {
         AbstractController controller = new AbstractControllerImpl();
-        assertEquals(0, controller.getViewObservers().size());
-        controller.addViewObserver(new ViewObserverImpl());
-        assertEquals(1, controller.getViewObservers().size());
+        assertEquals(0, controller.getViews().size());
+        controller.addViewListener(new ViewImpl());
+        assertEquals(1, controller.getViews().size());
     }
 
     /**
@@ -50,40 +46,40 @@ public class AbstractControllerTest
     public void testRemoveViewObserver()
     {
         AbstractController controller = new AbstractControllerImpl();
-        assertEquals(0, controller.getViewObservers().size());
-        ViewObserverImpl viewObserverImpl = new ViewObserverImpl();
-        controller.addViewObserver(viewObserverImpl);
-        assertEquals(1, controller.getViewObservers().size());
+        assertEquals(0, controller.getViews().size());
+        ViewImpl viewObserverImpl = new ViewImpl();
+        controller.addViewListener(viewObserverImpl);
+        assertEquals(1, controller.getViews().size());
         controller.removeViewObserver(viewObserverImpl);
-        assertEquals(0, controller.getViewObservers().size());
+        assertEquals(0, controller.getViews().size());
     }
 
     /**
-     * Test of addPostbackObserver method, of class AbstractController.
+     * Test of addPostbackListener method, of class AbstractController.
      */
     @Test
     public void testAddPostbackObserver()
     {
         AbstractController controller = new AbstractControllerImpl();
-        assertEquals(0, controller.getPostBackObservers().size());
-        PostBackObserver<Object> postBackObserver = new PostBackObserverImpl();
-        controller.addPostbackObserver(postBackObserver);
-        assertEquals(1, controller.getPostBackObservers().size());
+        assertEquals(0, controller.getPostBackListeners().size());
+        PostBackListener<Object> postBackObserver = new PostBackListenerImpl();
+        controller.addPostbackListener(postBackObserver);
+        assertEquals(1, controller.getPostBackListeners().size());
     }
 
     /**
-     * Test of removePostbackObserver method, of class AbstractController.
+     * Test of removePostbackListener method, of class AbstractController.
      */
     @Test
     public void testRemovePostbackObserver()
     {
         AbstractController controller = new AbstractControllerImpl();
-        assertEquals(0, controller.getPostBackObservers().size());
-        PostBackObserver<Object> postBackObserver = new PostBackObserverImpl();
-        controller.addPostbackObserver(postBackObserver);
-        assertEquals(1, controller.getPostBackObservers().size());
-        controller.removePostbackObserver(postBackObserver);
-        assertEquals(0, controller.getPostBackObservers().size());
+        assertEquals(0, controller.getPostBackListeners().size());
+        PostBackListener<Object> postBackObserver = new PostBackListenerImpl();
+        controller.addPostbackListener(postBackObserver);
+        assertEquals(1, controller.getPostBackListeners().size());
+        controller.removePostbackListener(postBackObserver);
+        assertEquals(0, controller.getPostBackListeners().size());
     }
 
     /**
@@ -93,10 +89,10 @@ public class AbstractControllerTest
     public void testFirePostBackData()
     {
         AbstractController controller = new AbstractControllerImpl();
-        assertEquals(0, controller.getPostBackObservers().size());
-        PostBackObserver<Object> postBackObserver = new PostBackObserverImpl();
-        controller.addPostbackObserver(postBackObserver);
-        assertEquals(1, controller.getPostBackObservers().size());
+        assertEquals(0, controller.getPostBackListeners().size());
+        PostBackListener<Object> postBackObserver = new PostBackListenerImpl();
+        controller.addPostbackListener(postBackObserver);
+        assertEquals(1, controller.getPostBackListeners().size());
         controller.firePostBackData(new Object());
     }
 
@@ -107,9 +103,9 @@ public class AbstractControllerTest
     public void testFireUpdateView()
     {
         AbstractController controller = new AbstractControllerImpl();
-        assertEquals(0, controller.getViewObservers().size());
-        controller.addViewObserver(new ViewObserverImpl());
-        assertEquals(1, controller.getViewObservers().size());
+        assertEquals(0, controller.getViews().size());
+        controller.addViewListener(new ViewImpl());
+        assertEquals(1, controller.getViews().size());
         controller.fireUpdateView(new Object());
     }
 
@@ -120,25 +116,11 @@ public class AbstractControllerTest
     public void testFireSetVisible()
     {
         AbstractController controller = new AbstractControllerImpl();
-        assertEquals(0, controller.getViewObservers().size());
-        controller.addViewObserver(new ViewObserverImpl());
-        assertEquals(1, controller.getViewObservers().size());
+        assertEquals(0, controller.getViews().size());
+        controller.addViewListener(new ViewImpl());
+        assertEquals(1, controller.getViews().size());
         controller.fireSetVisible(true);
         controller.fireSetVisible(false);
-    }
-
-    @Test
-    public void tesStuff()
-    {
-        AbstractController controller = new AbstractControllerImpl();
-        controller.addPostbackObserver(new PostBackObserver<String>()
-        {
-            public void dataToPost(String model)
-            {
-                System.out.println("Model:" + model);
-            }
-        });
-        controller.firePostBackData("lol");
     }
 
     public class AbstractControllerImpl extends AbstractController

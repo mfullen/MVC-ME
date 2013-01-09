@@ -3,13 +3,13 @@
 // -----------------------------------------------------------------------------
 package com.pwf.mvc;
 
-public class PostBackObserverImpl implements PostBackObserver<Object>
+public class PostBackListenerImpl implements PostBackListener<Object>
 {
-    public PostBackObserverImpl()
+    public PostBackListenerImpl()
     {
     }
 
-    public void dataToPost(Object model)
+    public void postData(Object model)
     {
         assert model != null : "Model is null";
     }

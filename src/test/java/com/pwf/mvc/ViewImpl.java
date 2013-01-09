@@ -3,9 +3,9 @@
 // -----------------------------------------------------------------------------
 package com.pwf.mvc;
 
-public class ViewObserverImpl implements View
+public class ViewImpl implements View
 {
-    public ViewObserverImpl()
+    public ViewImpl()
     {
     }
 

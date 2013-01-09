@@ -13,10 +13,10 @@ import java.util.Map;
 public abstract class AbstractController implements Controller
 {
     private Map<String, View<? extends Object>> observers = new HashMap<String, View<? extends Object>>();
-    private Collection<PostBackObserver<? extends Object>> postBackObservers = new ArrayList<PostBackObserver<? extends Object>>();
+    private Collection<PostBackListener<? extends Object>> postBackObservers = new ArrayList<PostBackListener<? extends Object>>();
 
     @Override
-    public <Model extends Object> void addViewObserver(View<Model> observer)
+    public <Model extends Object> void addViewListener(View<Model> observer)
     {
         this.observers.put(observer.getName(), observer);
     }
@@ -28,23 +28,23 @@ public abstract class AbstractController implements Controller
     }
 
     @Override
-    public <Model extends Object> void addPostbackObserver(PostBackObserver<Model> postBackObserver)
+    public <Model extends Object> void addPostbackListener(PostBackListener<Model> postBackObserver)
     {
         this.postBackObservers.add(postBackObserver);
     }
 
     @Override
-    public <Model extends Object> void removePostbackObserver(PostBackObserver<Model> postBackObserver)
+    public <Model extends Object> void removePostbackListener(PostBackListener<Model> postBackObserver)
     {
         this.postBackObservers.remove(postBackObserver);
     }
 
     protected <Model extends Object> void firePostBackData(Model model)
     {
-        for (Iterator<PostBackObserver<? extends Object>> it = postBackObservers.iterator(); it.hasNext();)
+        for (Iterator<PostBackListener<? extends Object>> it = postBackObservers.iterator(); it.hasNext();)
         {
-            PostBackObserver<Model> postBackObserver = (PostBackObserver<Model>) it.next();
-            postBackObserver.dataToPost(model);
+            PostBackListener<Model> postBackObserver = (PostBackListener<Model>) it.next();
+            postBackObserver.postData(model);
         }
     }
 
@@ -72,13 +72,13 @@ public abstract class AbstractController implements Controller
         View<Model> view = (View<Model>) this.observers.get(name);
         if (view == null)
         {
-            throw new ViewNotFoundException("The view (" + name + ") could not be found");
+            throw new ViewNotFoundException(createViewNotFoundErrorMesage(name));
         }
         return view;
     }
 
     @Override
-    public <Model extends Object> Collection<View<Model>> getViewObservers()
+    public <Model extends Object> Collection<View<Model>> getViews()
     {
         Collection<View<Model>> values = new ArrayList<View<Model>>(this.observers.values().size());
         for (View<? extends Object> view : this.observers.values())
@@ -90,12 +90,12 @@ public abstract class AbstractController implements Controller
     }
 
     @Override
-    public <Model extends Object> Collection<PostBackObserver<Model>> getPostBackObservers()
+    public <Model extends Object> Collection<PostBackListener<Model>> getPostBackListeners()
     {
-        Collection<PostBackObserver<Model>> values = new ArrayList<PostBackObserver<Model>>(this.postBackObservers.size());
-        for (PostBackObserver<? extends Object> postBackObserver : this.postBackObservers)
+        Collection<PostBackListener<Model>> values = new ArrayList<PostBackListener<Model>>(this.postBackObservers.size());
+        for (PostBackListener<? extends Object> postBackObserver : this.postBackObservers)
         {
-            values.add((PostBackObserver<Model>) postBackObserver);
+            values.add((PostBackListener<Model>) postBackObserver);
         }
 
         return Collections.unmodifiableCollection(values);
