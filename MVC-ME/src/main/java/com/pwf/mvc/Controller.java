@@ -44,8 +44,7 @@ public interface Controller
      * @param name the name to look for
      * @return
      */
-    <Model extends Object> View<Model> getView(String name) throws
-            ViewNotFoundException;
+    <Model extends Object> View<Model> getView(String name);
 
     /**
      * Remove postBackListener

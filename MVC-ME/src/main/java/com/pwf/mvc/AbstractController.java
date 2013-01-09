@@ -12,36 +12,36 @@ import java.util.Map;
  */
 public abstract class AbstractController implements Controller
 {
-    private Map<String, View<? extends Object>> observers = new HashMap<String, View<? extends Object>>();
-    private Collection<PostBackListener<? extends Object>> postBackObservers = new ArrayList<PostBackListener<? extends Object>>();
+    private Map<String, View<? extends Object>> viewsMap = new HashMap<String, View<? extends Object>>();
+    private Collection<PostBackListener<? extends Object>> postBackListeners = new ArrayList<PostBackListener<? extends Object>>();
 
     @Override
-    public <Model extends Object> void addViewListener(View<Model> observer)
+    public <Model extends Object> void addViewListener(View<Model> view)
     {
-        this.observers.put(observer.getName(), observer);
+        this.viewsMap.put(view.getName(), view);
     }
 
     @Override
-    public <Model extends Object> void removeViewObserver(View<Model> observer)
+    public <Model extends Object> void removeViewObserver(View<Model> view)
     {
-        this.observers.remove(observer.getName());
+        this.viewsMap.remove(view.getName());
     }
 
     @Override
-    public <Model extends Object> void addPostbackListener(PostBackListener<Model> postBackObserver)
+    public <Model extends Object> void addPostbackListener(PostBackListener<Model> postBackListener)
     {
-        this.postBackObservers.add(postBackObserver);
+        this.postBackListeners.add(postBackListener);
     }
 
     @Override
-    public <Model extends Object> void removePostbackListener(PostBackListener<Model> postBackObserver)
+    public <Model extends Object> void removePostbackListener(PostBackListener<Model> postBackListener)
     {
-        this.postBackObservers.remove(postBackObserver);
+        this.postBackListeners.remove(postBackListener);
     }
 
     protected <Model extends Object> void firePostBackData(Model model)
     {
-        for (Iterator<PostBackListener<? extends Object>> it = postBackObservers.iterator(); it.hasNext();)
+        for (Iterator<PostBackListener<? extends Object>> it = postBackListeners.iterator(); it.hasNext();)
         {
             PostBackListener<Model> postBackObserver = (PostBackListener<Model>) it.next();
             postBackObserver.postData(model);
@@ -50,7 +50,7 @@ public abstract class AbstractController implements Controller
 
     protected <Model extends Object> void fireUpdateView(Model model)
     {
-        for (Iterator<View<? extends Object>> it = observers.values().iterator(); it.hasNext();)
+        for (Iterator<View<? extends Object>> it = viewsMap.values().iterator(); it.hasNext();)
         {
             View<Model> viewObserver = (View<Model>) it.next();
             viewObserver.update(model);
@@ -59,17 +59,16 @@ public abstract class AbstractController implements Controller
 
     protected <Model extends Object> void fireSetVisible(boolean visible)
     {
-        for (Iterator<View<? extends Object>> it = observers.values().iterator(); it.hasNext();)
+        for (Iterator<View<? extends Object>> it = viewsMap.values().iterator(); it.hasNext();)
         {
             View<Model> viewObserver = (View<Model>) it.next();
             viewObserver.setVisible(visible);
         }
     }
 
-    public <Model extends Object> View<Model> getView(String name) throws
-            ViewNotFoundException
+    public <Model extends Object> View<Model> getView(String name) 
     {
-        View<Model> view = (View<Model>) this.observers.get(name);
+        View<Model> view = (View<Model>) this.viewsMap.get(name);
         if (view == null)
         {
             throw new ViewNotFoundException(createViewNotFoundErrorMesage(name));
@@ -80,8 +79,8 @@ public abstract class AbstractController implements Controller
     @Override
     public <Model extends Object> Collection<View<Model>> getViews()
     {
-        Collection<View<Model>> values = new ArrayList<View<Model>>(this.observers.values().size());
-        for (View<? extends Object> view : this.observers.values())
+        Collection<View<Model>> values = new ArrayList<View<Model>>(this.viewsMap.values().size());
+        for (View<? extends Object> view : this.viewsMap.values())
         {
             values.add((View<Model>) view);
         }
@@ -92,8 +91,8 @@ public abstract class AbstractController implements Controller
     @Override
     public <Model extends Object> Collection<PostBackListener<Model>> getPostBackListeners()
     {
-        Collection<PostBackListener<Model>> values = new ArrayList<PostBackListener<Model>>(this.postBackObservers.size());
-        for (PostBackListener<? extends Object> postBackObserver : this.postBackObservers)
+        Collection<PostBackListener<Model>> values = new ArrayList<PostBackListener<Model>>(this.postBackListeners.size());
+        for (PostBackListener<? extends Object> postBackObserver : this.postBackListeners)
         {
             values.add((PostBackListener<Model>) postBackObserver);
         }
