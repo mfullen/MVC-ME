@@ -15,7 +15,7 @@
 
     <name>MVC-ME :: MvcFramework</name>
     <url>http://maven.apache.org</url>
-    <description>MVC-ME! A lite Mvc framework designed for non web applications. Compatible with Swing and Android</description>
+    <description>MVC-ME! A lite Mvc framework designed for Java non web applications. Compatible with Swing and Android</description>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
