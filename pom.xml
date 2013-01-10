@@ -47,6 +47,7 @@
             <modules>
                 <module>MVC-ME</module>
                 <module>ModelControllerExample</module>
+                <module>AndroidExample</module>
             </modules>
         </profile>
     </profiles>
