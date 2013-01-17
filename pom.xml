@@ -51,8 +51,4 @@
             </modules>
         </profile>
     </profiles>
-
-  <modules>
-    <module>AndroidExample</module>
-  </modules>
 </project>
