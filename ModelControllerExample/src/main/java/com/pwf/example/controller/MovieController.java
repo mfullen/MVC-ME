@@ -3,14 +3,15 @@ package com.pwf.example.controller;
 import com.pwf.example.model.InMemoryMovieRepository;
 import com.pwf.example.model.Movie;
 import com.pwf.example.model.MovieRepository;
-import com.pwf.mvc.AbstractController;
-import com.pwf.mvc.ViewNotFoundException;
+import com.pwf.mvcme.MvcMeController;
+
+import com.pwf.mvcme.ViewNotFoundException;
 
 /**
  *
  * @author mfullen
  */
-public class MovieController extends AbstractController
+public class MovieController extends MvcMeController
 {
     public static final String MOVIE_CREATE = "create";
     public static final String MOVIE_EDIT = "edit";
@@ -62,7 +63,7 @@ public class MovieController extends AbstractController
      */
     public void created(Movie movie)
     {
-        this.movieRepository.add(movie);
+        this.movieRepository.create(movie);
         this.movieRepository.save();
         this.index();
     }
@@ -74,7 +75,7 @@ public class MovieController extends AbstractController
      */
     public void edit(int id)
     {
-        Movie movie = this.movieRepository.findById(id);
+        Movie movie = this.movieRepository.get(id);
         try
         {
             this.getView(MOVIE_EDIT).update(movie);
@@ -92,7 +93,7 @@ public class MovieController extends AbstractController
      */
     public void edited(Movie movie)
     {
-        Movie emovie = this.movieRepository.findById(movie.getId());
+        Movie emovie = this.movieRepository.get(movie.getId());
         emovie.setGenre(movie.getGenre());
         emovie.setTitle(movie.getTitle());
 
@@ -107,7 +108,7 @@ public class MovieController extends AbstractController
      */
     public void delete(int id)
     {
-        Movie movie = this.movieRepository.findById(id);
+        Movie movie = this.movieRepository.get(id);
         try
         {
             this.getView(MOVIE_DELETE).update(movie);
@@ -125,8 +126,8 @@ public class MovieController extends AbstractController
      */
     public void deleted(Movie movie)
     {
-        Movie nd = this.movieRepository.findById(movie.getId());
-        this.movieRepository.remove(nd);
+        Movie nd = this.movieRepository.get(movie.getId());
+        this.movieRepository.delete(nd);
         this.movieRepository.save();
 
         this.index();

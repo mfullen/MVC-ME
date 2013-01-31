@@ -1,8 +1,8 @@
 package com.pwf.example.swing;
 
 import com.pwf.example.controller.MovieController;
-import com.pwf.mvc.ControllersManager;
-import com.pwf.mvc.MvcFramework;
+import com.pwf.mvcme.MvcFramework;
+import com.pwf.mvcme.MvcMe;
 import javax.swing.JFrame;
 
 /**
@@ -13,13 +13,13 @@ public class MainApp
 {
     public static void main(String[] args)
     {
-        ControllersManager cm = MvcFramework.createControllersManager();
-        cm.addController(new MovieController());
+        MvcFramework mvcFramework = MvcMe.createMvcFramework();
+        mvcFramework.register(new MovieController());
 
         JFrame frame = new JFrame("Swing Example");
 
         MoviePanel moviePanel = new MoviePanel();
-        moviePanel.setControllerManager(cm);
+        mvcFramework.register(moviePanel);
 
         frame.add(moviePanel);
         frame.pack();

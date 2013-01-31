@@ -6,8 +6,9 @@ package com.pwf.example.swing;
 import com.pwf.example.controller.MovieController;
 import com.pwf.example.model.Genre;
 import com.pwf.example.model.Movie;
-import com.pwf.mvc.ControllersManager;
-import com.pwf.mvc.View;
+import com.pwf.mvcme.MvcFramework;
+import com.pwf.mvcme.MvcMeView;
+import com.pwf.mvcme.View;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JDialog;
 import javax.swing.JFrame;
@@ -19,6 +20,18 @@ import javax.swing.JOptionPane;
  */
 public class ModifyMovie extends javax.swing.JPanel implements View<Movie>
 {
+    private MvcFramework mvcFramework;
+
+    public MvcFramework getMvcFramework()
+    {
+        return mvcFramework;
+    }
+
+    public void setMvcFramework(MvcFramework mvcFramework)
+    {
+        this.mvcFramework = mvcFramework;
+    }
+
     public static class EditMovie extends ModifyMovie
     {
         public EditMovie()
@@ -29,7 +42,7 @@ public class ModifyMovie extends javax.swing.JPanel implements View<Movie>
         @Override
         public void save()
         {
-            MovieController controller = this.getControllerManager().getController(MovieController.class);
+            MovieController controller = this.getMvcFramework().getController(MovieController.class);
             controller.edited(this.getMovieFromInput());
             this.setVisible(false);
         }
@@ -51,7 +64,7 @@ public class ModifyMovie extends javax.swing.JPanel implements View<Movie>
         @Override
         public void save()
         {
-            MovieController controller = this.getControllerManager().getController(MovieController.class);
+            MovieController controller = this.getMvcFramework().getController(MovieController.class);
             controller.created(this.getMovieFromInput());
             this.setVisible(false);
         }
@@ -63,10 +76,8 @@ public class ModifyMovie extends javax.swing.JPanel implements View<Movie>
         }
     }
 
-    static class DeleteMovie implements View<Movie>
+    static class DeleteMovie extends MvcMeView<Movie>
     {
-        private ControllersManager cm;
-
         public void update(Movie t)
         {
             String message = String.format("Would you like to Delete %s", t);
@@ -74,31 +85,17 @@ public class ModifyMovie extends javax.swing.JPanel implements View<Movie>
             switch (dialogResult)
             {
                 case JOptionPane.YES_OPTION:
-                    cm.getController(MovieController.class).deleted(t);
+                    this.getMvcFramework().getController(MovieController.class).deleted(t);
                     break;
             }
         }
 
-        public void setVisible(boolean bln)
-        {
-        }
-
+        @Override
         public String getName()
         {
             return MovieController.MOVIE_DELETE;
         }
-
-        public void setControllerManager(ControllersManager cm)
-        {
-            this.cm = cm;
-        }
-
-        public ControllersManager getControllerManager()
-        {
-            return this.cm;
-        }
     }
-    private ControllersManager cm;
 
     /**
      * Creates new form ModifyMovie
@@ -149,17 +146,6 @@ public class ModifyMovie extends javax.swing.JPanel implements View<Movie>
 
     public void save()
     {
-    }
-
-    public void setControllerManager(ControllersManager cm)
-    {
-        this.cm = cm;
-
-    }
-
-    public ControllersManager getControllerManager()
-    {
-        return cm;
     }
 
     /**

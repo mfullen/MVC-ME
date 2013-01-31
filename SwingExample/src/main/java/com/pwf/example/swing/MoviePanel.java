@@ -5,9 +5,9 @@ package com.pwf.example.swing;
 
 import com.pwf.example.controller.MovieController;
 import com.pwf.example.model.Movie;
-import com.pwf.mvc.ControllersManager;
-import com.pwf.mvc.View;
-import java.util.ArrayList;
+import com.pwf.mvcme.MvcFramework;
+import com.pwf.mvcme.MvcMeView;
+import com.pwf.mvcme.View;
 import java.util.Collection;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
@@ -19,8 +19,8 @@ import javax.swing.JOptionPane;
 public class MoviePanel extends javax.swing.JPanel implements
         View<Collection<Movie>>
 {
-    private ControllersManager cm;
     private MovieController controller;
+    private MvcFramework mvcFramework;
 
     /**
      * Creates new form MoviePanel
@@ -66,7 +66,7 @@ public class MoviePanel extends javax.swing.JPanel implements
 
     public void deleteMovieClicked()
     {
-        this.controller = this.cm.getController(MovieController.class);
+        this.controller = this.mvcFramework.getController(MovieController.class);
         Movie selectedValue = (Movie) this.jList1.getSelectedValue();
         if (selectedValue != null)
         {
@@ -74,33 +74,26 @@ public class MoviePanel extends javax.swing.JPanel implements
         }
     }
 
-    public void setControllerManager(ControllersManager cm)
+    public MvcFramework getMvcFramework()
     {
-        this.cm = cm;
-        this.controller = this.cm.getController(MovieController.class);
-        this.controller.addViewListener(this);
-        this.controller.addViewListener(new ErrorMessage());
+        return this.mvcFramework;
+    }
 
-        Collection<View> childViews = new ArrayList<View>();
-        childViews.add(new ModifyMovie.CreateMovie());
-        childViews.add(new ModifyMovie.EditMovie());
-        childViews.add(new ModifyMovie.DeleteMovie());
+    public void setMvcFramework(MvcFramework cf)
+    {
+        this.mvcFramework = cf;
 
-        for (View view : childViews)
-        {
-            view.setControllerManager(cm);
-            this.controller.addViewListener(view);
-        }
+        this.controller = this.mvcFramework.getController(MovieController.class);
+        this.mvcFramework.register(new ErrorMessage());
+        this.mvcFramework.register(new ModifyMovie.CreateMovie());
+        this.mvcFramework.register(new ModifyMovie.EditMovie());
+        this.mvcFramework.register(new ModifyMovie.DeleteMovie());
+
 
         this.controller.index();
     }
 
-    public ControllersManager getControllerManager()
-    {
-        return cm;
-    }
-
-    static class ErrorMessage implements View<String>
+    static class ErrorMessage extends MvcMeView<String>
     {
         public void update(String t)
         {
@@ -111,21 +104,6 @@ public class MoviePanel extends javax.swing.JPanel implements
         public String getName()
         {
             return View.ERROR_VIEW_ID;
-        }
-
-        public void setControllerManager(ControllersManager cm)
-        {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public ControllersManager getControllerManager()
-        {
-            throw new UnsupportedOperationException("Not supported yet.");
-        }
-
-        public void setVisible(boolean bln)
-        {
-            throw new UnsupportedOperationException("Not supported yet.");
         }
     }
 

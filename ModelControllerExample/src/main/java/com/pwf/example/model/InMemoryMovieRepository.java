@@ -15,14 +15,14 @@ public class InMemoryMovieRepository implements MovieRepository
     public InMemoryMovieRepository()
     {
         int index = 0;
-        this.add(new Movie(++index, "Die Hard", Genre.ACTION));
-        this.add(new Movie(++index, "Terminator", Genre.ACTION));
-        this.add(new Movie(++index, "Nutty Professor", Genre.COMEDY));
-        this.add(new Movie(++index, "Scream", Genre.HORROR));
+        this.create(new Movie(++index, "Die Hard", Genre.ACTION));
+        this.create(new Movie(++index, "Terminator", Genre.ACTION));
+        this.create(new Movie(++index, "Nutty Professor", Genre.COMEDY));
+        this.create(new Movie(++index, "Scream", Genre.HORROR));
 
     }
 
-    public final void add(Movie model)
+    public final void create(Movie model)
     {
         if (this.movieMap.containsKey(model.getId()))
         {
@@ -47,7 +47,7 @@ public class InMemoryMovieRepository implements MovieRepository
         return id;
     }
 
-    public void remove(Movie model)
+    public void delete(Movie model)
     {
         this.movieMap.remove(model.getId());
     }
@@ -57,12 +57,12 @@ public class InMemoryMovieRepository implements MovieRepository
         return this.movieMap.values();
     }
 
-    public Movie findById(int id)
+    public Movie get(int id)
     {
         return this.movieMap.get(id);
     }
 
-    public void removeAll()
+    public void deleteAll()
     {
         this.movieMap.clear();
     }

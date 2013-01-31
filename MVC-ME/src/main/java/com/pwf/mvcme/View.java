@@ -1,10 +1,10 @@
-package com.pwf.mvc;
+package com.pwf.mvcme;
 
 /**
  *
  * View interface to describe a View in the MVC Framework
  */
-public interface View<T> extends ControllerManagerProperty
+public interface View<T> extends NameProperty
 {
     static final String ERROR_VIEW_ID = "error";
 
@@ -22,10 +22,7 @@ public interface View<T> extends ControllerManagerProperty
      */
     void setVisible(boolean visible);
 
-    /**
-     * Get the name of this View. This name should be unique
-     *
-     * @return String of the name for the view
-     */
-    String getName();
+    MvcFramework getMvcFramework();
+
+    void setMvcFramework(MvcFramework mvcFramework);
 }
