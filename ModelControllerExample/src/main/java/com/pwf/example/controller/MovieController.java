@@ -49,6 +49,7 @@ public class MovieController extends MvcMeController
         try
         {
             this.getView(MOVIE_CREATE).update(new Movie());
+            this.getView(MOVIE_CREATE).setVisible(true);
         }
         catch (ViewNotFoundException ex)
         {
@@ -79,6 +80,7 @@ public class MovieController extends MvcMeController
         try
         {
             this.getView(MOVIE_EDIT).update(movie);
+            this.getView(MOVIE_EDIT).setVisible(true);
         }
         catch (ViewNotFoundException ex)
         {

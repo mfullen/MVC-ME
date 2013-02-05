@@ -50,7 +50,6 @@ public class MoviePanel extends javax.swing.JPanel implements
     public void addMovieClicked()
     {
         this.controller.create();
-        this.controller.getView(MovieController.MOVIE_CREATE).setVisible(true);
     }
 
     public void editMovieClicked()
@@ -60,7 +59,6 @@ public class MoviePanel extends javax.swing.JPanel implements
         if (selectedValue != null)
         {
             this.controller.edit(selectedValue.getId());
-            this.controller.getView(MovieController.MOVIE_EDIT).setVisible(true);
         }
     }
 
