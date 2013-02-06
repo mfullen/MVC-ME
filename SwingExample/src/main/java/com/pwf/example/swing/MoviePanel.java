@@ -34,7 +34,7 @@ public class MoviePanel extends javax.swing.JPanel implements
     @Override
     public String getName()
     {
-        return "Index";
+        return MovieController.MOVIE_INDEX;
     }
 
     public void update(Collection<Movie> movies)

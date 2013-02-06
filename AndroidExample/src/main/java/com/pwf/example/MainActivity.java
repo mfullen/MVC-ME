@@ -2,19 +2,21 @@ package com.pwf.example;
 
 import android.app.Activity;
 import android.os.Bundle;
-import android.util.Log;
-import android.widget.ArrayAdapter;
 import com.pwf.example.controller.MovieController;
 import com.pwf.example.model.Movie;
-import com.pwf.mvc.ControllersManager;
-import com.pwf.mvc.MvcFramework;
-import com.pwf.mvc.View;
+import com.pwf.mvcme.MvcFramework;
+import com.pwf.mvcme.MvcMe;
+import com.pwf.mvcme.View;
 import java.util.Collection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class MainActivity extends Activity
+public class MainActivity extends Activity implements
+        View<Collection<Movie>>
 {
-    private static String TAG = "AndroidExample";
-
+    private static Logger logger = LoggerFactory.getLogger(MainActivity.class);
+    private MovieController controller;
+    private MvcFramework mvcFramework;
 
     /**
      * Called when the activity is first created.
@@ -28,10 +30,43 @@ public class MainActivity extends Activity
     public void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
-        Log.i(TAG, "onCreate");
+        logger.debug("Android Example created");
         setContentView(R.layout.main);
 
-      
+        this.mvcFramework = MvcMe.createMvcFramework();
+        mvcFramework.register(new MovieController());
     }
 
+    @Override
+    public String getName()
+    {
+        return MovieController.MOVIE_INDEX;
+    }
+
+    @Override
+    public MvcFramework getMvcFramework()
+    {
+        return this.mvcFramework;
+    }
+
+    @Override
+    public void setMvcFramework(MvcFramework cf)
+    {
+        this.mvcFramework = cf;
+
+        this.controller = this.mvcFramework.getController(MovieController.class);
+//        this.mvcFramework.register(new ErrorMessage());
+//        this.mvcFramework.register(new ModifyMovie.CreateMovie());
+//        this.mvcFramework.register(new ModifyMovie.EditMovie());
+//        this.mvcFramework.register(new ModifyMovie.DeleteMovie());
+
+
+        this.controller.index();
+    }
+
+    @Override
+    public void update(Collection<Movie> t)
+    {
+        logger.info("Movie {}", t);
+    }
 }
