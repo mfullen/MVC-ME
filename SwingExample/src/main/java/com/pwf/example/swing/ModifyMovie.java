@@ -133,7 +133,7 @@ public class ModifyMovie extends javax.swing.JPanel implements View<Movie>
         this.idText.setText(movie.getId() + "");
         this.titleText.setText(movie.getTitle());
 
-        DefaultComboBoxModel<Genre> model = new DefaultComboBoxModel<Genre>(Genre.values());
+        DefaultComboBoxModel model = new DefaultComboBoxModel(Genre.values());
         model.setSelectedItem(movie.getGenre());
         this.genreComboBox.setModel(model);
     }

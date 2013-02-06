@@ -11,11 +11,10 @@ import com.pwf.mvc.MvcFramework;
 import com.pwf.mvc.View;
 import java.util.Collection;
 
-public class MainActivity extends Activity implements
-        View<Collection<Movie>>
+public class MainActivity extends Activity
 {
     private static String TAG = "AndroidExample";
-    private ControllersManager controllersManager;
+
 
     /**
      * Called when the activity is first created.
@@ -32,38 +31,7 @@ public class MainActivity extends Activity implements
         Log.i(TAG, "onCreate");
         setContentView(R.layout.main);
 
-        ControllersManager cm = MvcFramework.createControllersManager();
-        cm.addController(new MovieController());
-
-        this.setControllerManager(cm);
-        MovieController controller = cm.getController(MovieController.class);
-        controller.addViewListener(this);
-        controller.index();
+      
     }
 
-    @Override
-    public void update(Collection<Movie> movies)
-    {
-        Log.i(TAG, movies + "");
-        //ArrayAdapter<Movie> arrayAdapter = new ArrayAdapter<Movie>(this, R.layout.main, movies.toArray(new Movie[movies.size()]));
-        //this.setListAdapter(arrayAdapter);
-    }
-
-    @Override
-    public String getName()
-    {
-        return MovieController.MOVIE_INDEX;
-    }
-
-    @Override
-    public void setControllerManager(ControllersManager cm)
-    {
-        this.controllersManager = cm;
-    }
-
-    @Override
-    public ControllersManager getControllerManager()
-    {
-        return this.controllersManager;
-    }
 }

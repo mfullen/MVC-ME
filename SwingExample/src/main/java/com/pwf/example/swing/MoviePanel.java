@@ -39,7 +39,7 @@ public class MoviePanel extends javax.swing.JPanel implements
 
     public void update(Collection<Movie> movies)
     {
-        DefaultListModel<Movie> defaultListModel = new DefaultListModel<Movie>();
+        DefaultListModel defaultListModel = new DefaultListModel();
         for (Movie movie : movies)
         {
             defaultListModel.addElement(movie);
